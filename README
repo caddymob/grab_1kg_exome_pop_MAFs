@@ -1,6 +1,8 @@
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==
 ~
 ~ grab_1kg_exome_pop_MAFs.pl - make a table of MAFs by 1000Genomes popuation
+~ by Jason Corneveaux, Bioinformatician, TGen Neurogenomics
+~ 12/30/2011
 ~
 *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==
 
@@ -9,7 +11,7 @@ and downloads a local copy of the 1000 Genomes exomes from this path:
 
 ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20110521/
 
-It then uses vcftools (vcftools.sourceforge.net) to convert the vcf 
+It then uses vcftools (http://vcftools.sourceforge.net) to convert the vcf 
 to a transposed ped file (tped & tfam) with PLINK (http://pngu.mgh.harvard.edu/~purcell/plink/).
 
 I include a file called "1kg.samples" that the perl script reads to add population codes
