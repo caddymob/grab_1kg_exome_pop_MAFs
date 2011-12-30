@@ -1,0 +1,22 @@
+*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==
+~
+~ grab_1kg_exome_pop_MAFs.pl - make a table of MAFs by 1000Genomes popuation
+~
+*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==
+
+This quick script takes only a coordinate, be it chr1, 1, or chr1:41,093,504-41,163,663 
+and downloads a local copy of the 1000 Genomes exomes from this path:
+
+ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20110521/
+
+It then uses vcftools (vcftools.sourceforge.net) to convert the vcf 
+to a transposed ped file (tped & tfam) with PLINK (http://pngu.mgh.harvard.edu/~purcell/plink/).
+
+I include a file called "1kg.samples" that the perl script reads to add population codes
+and genders to the tfam. The 1kg.samples file is the first 5 columns from the 1000G sample
+info spreadsheet here: http://www.1000genomes.org/sites/1000genomes.org/files/documents/20101214_1000genomes_samples.xls
+
+Using the population codes we run plink selecting each of the uniq populations and calculate the MAFs for each. Then we
+read the .frq and tped files into R and make a nice table.
+
+Quick and dirty, I know...
