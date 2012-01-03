@@ -45,14 +45,14 @@ foreach $pop (@uniq) {
 %seen = ();
 @uniqpops = grep { ! $seen{$_} ++ } @pops;
 
-# The workhors routine
+# The workhorse routine
 get_data();
 
 sub get_data {
 	system("tabix -fh ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20110521/ALL.chr$CHR.phase1_integrated_calls.20101123.snps_indels_svs.genotypes.vcf.gz $REGION > ALL.chr$CHR.phase1_integrated_calls.20101123.$REGION.vcf");
 	system("vcftools --vcf ALL.chr$CHR.phase1_integrated_calls.20101123.$REGION.vcf --plink-tped --out 1000G_integrated_calls.20101123.$REGION");
 	
-	system("rm ALL.chr$CHR.phase1_integrated_calls.20101123.$REGION.vcf*");
+	system("rm ALL.chr$CHR.phase1_integrated_calls.20101123.$REGION.vcf* *vcf.gz.tbi");
 	system("cp 1000G_integrated_calls.20101123.$REGION.tfam 1000G_integrated_calls.20101123.$REGION.tfam.orig");
 	
 	# Add population codes and genders to the tfam file
@@ -77,9 +77,22 @@ sub get_data {
 		system("rm $pop.$REGION.log $pop.samples");
 	}
 
+	# Added in a bit to do european, asian, african and latin-american total MAFs
+	system("grep -E \"CHB|CHS|JPT\" 1000G_integrated_calls.20101123.$REGION.tfam | cut -f1,2 > asian.samples");
+	system("grep -E \"CEU|TSI|GBR|FIN|IBS\" 1000G_integrated_calls.20101123.$REGION.tfam | cut -f1,2 > euro.samples");
+	system("grep -E \"YRI|LWK|ASW\" 1000G_integrated_calls.20101123.$REGION.tfam | cut -f1,2 > african.samples");
+	system("grep -E \"MXL|CLM|PUR\" 1000G_integrated_calls.20101123.$REGION.tfam | cut -f1,2 > latino.samples");
+
+	system("plink --tfile 1000G_integrated_calls.20101123.$REGION --noweb --keep asian.samples --freq --out asian.$REGION");
+	system("plink --tfile 1000G_integrated_calls.20101123.$REGION --noweb --keep euro.samples --freq --out euro.$REGION");
+	system("plink --tfile 1000G_integrated_calls.20101123.$REGION --noweb --keep african.samples --freq --out african.$REGION");
+	system("plink --tfile 1000G_integrated_calls.20101123.$REGION --noweb --keep latino.samples --freq --out latino.$REGION");
+
+	system("rm asian.samples euro.samples african.samples latino.samples");
+
 	# Use R out of laziness to make a master table for the MAFs by populations 
 	system("Rscript --vanilla make_MAF_table.R 1000G_integrated_calls.20101123.$REGION.tped");
-	system("rm 1000G_integrated_calls.20101123.$REGION.t* 1000G_integrated_calls.20101123.$REGION.log");
+	system("rm 1000G_integrated_calls.20101123.$REGION.t* *.$REGION.log");
 	system("rm *.$REGION.frq");
 }
-
+	

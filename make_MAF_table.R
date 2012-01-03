@@ -18,6 +18,16 @@ for (i in c(1:length(files))) {
   master <- merge(master,tmp)
 }
 
+master <- subset(master, 
+          select=c("euro_MAF","CEU_MAF","GBR_MAF","TSI_MAF","IBS_MAF","FIN_MAF",
+                   "asian_MAF","CHB_MAF","CHS_MAF","JPT_MAF",
+                   "african_MAF","YRI_MAF","LWK_MAF","ASW_MAF",
+                   "latino_MAF","MXL_MAF","CLM_MAF","PUR_MAF",
+                   "euro_NChr","CEU_NChr","GBR_NChr","TSI_NChr","IBS_NChr","FIN_NChr",
+                   "asian_NChr","CHB_NChr","CHS_NChr","JPT_NChr",
+                   "african_NChr","YRI_NChr","LWK_NChr","ASW_NChr",
+                   "latino_NChr","MXL_NChr","CLM_NChr","PUR_NChr"))
+
 outfile <- gsub(".tped",".popMAFs",tpedfile)
 
 write.table(master, file = outfile,
